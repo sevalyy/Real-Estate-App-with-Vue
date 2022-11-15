@@ -10,13 +10,13 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 .main {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   font-size: 1.2em;
-  padding: 0 90px;
+  padding: 20px 90px;
 }
 
 img {
@@ -28,13 +28,12 @@ nav {
 }
 
 nav a {
-  font-weight: bold;
   color: #1e1519;
   margin: 0 30px;
   text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-  font-weight: lighter;
+  font-weight: bolder;
 }
 </style>
