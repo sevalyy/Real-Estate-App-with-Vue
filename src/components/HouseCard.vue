@@ -1,20 +1,33 @@
 <template>
   <div class="card">
     <img alt="house photo" :src="house.image" />
-    <div>
-      <p>{{ house.location.street }}</p>
-      <p>{{ house.location.city }}</p>
-      <p>{{ house.price }}</p>
-
-      <p>{{ house.location.zip }}</p>
-      <p>bathroom:{{ house.rooms.bathrooms }}</p>
-      <p>bedroom:{{ house.rooms.bedrooms }}</p>
+    <div class="info">
+      <p class="boldText">{{ house.location.street }}</p>
+      <p>€ {{ house.price }}</p>
+      <div class="flex">
+        <p class="lightText">{{ house.location.zip }}</p>
+        <p class="lightText">{{ house.location.city }}</p>
+      </div>
+      <div class="flex">
+        <p>
+          <span class="material-symbols-outlined"> bathtub </span
+          >{{ house.rooms.bathrooms }}
+        </p>
+        <p>
+          <span class="material-symbols-outlined"> bed </span
+          >{{ house.rooms.bedrooms }}
+        </p>
+        <p>
+          <span class="material-symbols-outlined"> square </span>
+          {{ house.size }}m2
+        </p>
+      </div>
     </div>
   </div>
 
-  <div class="edit">
-    <p>delete</p>
-    <p>edit</p>
+  <div>
+    <span class="material-symbols-outlined"> delete </span>
+    <span class="material-symbols-outlined"> edit </span>
   </div>
 </template>
 
@@ -36,7 +49,7 @@ export default {
   justify-content: space-between;
   margin: 10px 40px;
 }
-.edit {
+.flex {
   display: flex;
 }
 
@@ -46,5 +59,14 @@ p {
 img {
   height: 150px;
   width: 200px;
+}
+.boldText {
+  font-weight: bolder;
+}
+.lightText {
+  color: lightgray;
+}
+.info {
+  text-align: left;
 }
 </style>

@@ -1,6 +1,15 @@
 <template>
   <div class="container">
-    <input />
+    <div class="flex">
+      <h1>Houses</h1>
+
+      <p>Create New</p>
+    </div>
+    <div class="flex">
+      <input placeholder="search for a house" />
+      <div><button>Size</button><button>Price</button></div>
+    </div>
+
     <div class="main" v-for="house in houses" :key="house.id">
       <HouseCard :house="house" />
     </div>
@@ -45,22 +54,18 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  background-color: rgb(194, 192, 192);
-}
 .main {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: white;
-  width: 70%;
   margin: 20px 50px;
 }
-.edit {
+.flex {
   display: flex;
-}
-
-.house {
-  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 50px;
 }
 p {
   margin: 10px;

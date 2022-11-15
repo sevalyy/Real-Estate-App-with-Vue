@@ -17,6 +17,7 @@ export default {};
   justify-content: flex-start;
   font-size: 1.2em;
   padding: 20px 90px;
+  background-color: white;
 }
 
 img {
