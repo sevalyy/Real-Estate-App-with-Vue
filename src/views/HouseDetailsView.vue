@@ -1,12 +1,27 @@
 <template>
   <div class="row">
-    <div class="col1">Details</div>
-    <div class="col2">Recommended Houses</div>
+    <div class="col1">Details {{ id }} KK</div>
+    <div v-if="house" class="col2">Recommended {{ house.size }}</div>
   </div>
 </template>
 
 <script>
-export default {};
+import { useStore } from "vuex";
+import { computed } from "vue";
+
+export default {
+  props: ["id"],
+  setup(props) {
+    const store = useStore();
+    store.dispatch("initializeHouses");
+
+    const house = computed(() => {
+      return store.state.houses.find((h) => h.id == props.id);
+    });
+
+    return { house };
+  },
+};
 </script>
 
 <style scoped>

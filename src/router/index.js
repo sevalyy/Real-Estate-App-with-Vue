@@ -27,6 +27,7 @@ const routes = [
     path: "/housedetails/:id",
     name: "housedetails",
     component: HouseDetailsView,
+    props: true,
   },
 ];
 

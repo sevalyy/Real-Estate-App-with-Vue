@@ -11,7 +11,7 @@ export default createStore({
     },
   },
   actions: {
-    getHouses(context) {
+    initializeHouses(context) {
       axios
         .get(`https://api.intern.d-tt.nl/api/houses`, {
           headers: {
