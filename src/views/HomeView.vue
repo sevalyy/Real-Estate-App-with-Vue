@@ -13,46 +13,31 @@
       <div><button>Size</button><button>Price</button></div>
     </div>
 
-    <div class="main" v-for="house in houses" :key="house.id">
+    <router-link
+      :to="{ name: 'housedetails', params: { id: house.id } }"
+      class="main"
+      v-for="house in houses"
+      :key="house.id"
+    >
       <HouseCard :house="house" />
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
 import HouseCard from "@/components/HouseCard.vue";
-import axios from "axios";
-
 export default {
-  name: "HomeView",
-  components: {
-    HouseCard,
-  },
-  mounted() {
-    this.getHouses();
-  },
-  data() {
-    return {
-      houses: [],
-      errors: [],
-    };
-  },
-  methods: {
-    getHouses() {
-      axios
-        .get(`https://api.intern.d-tt.nl/api/houses`, {
-          headers: {
-            "X-Api-Key": process.env.VUE_APP_API_KEY,
-          },
-        })
+  setup() {
+    const store = useStore();
+    const houses = computed(() => {
+      return store.state.houses;
+    });
 
-        .then((response) => (this.houses = response.data))
-        .catch((error) => {
-          this.errors.push(error);
-          console.log();
-        });
-    },
+    return { houses };
   },
+  components: { HouseCard },
 };
 </script>
 

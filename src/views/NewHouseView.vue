@@ -1,191 +1,193 @@
 <template>
-  <div class="row">
-    <div class="col2 expandOnSmall">
-      <router-link class="left" to="/">Back to the overview</router-link>
+  <div class="main">
+    <div class="row">
+      <div class="col2 expandOnSmall">
+        <router-link class="left" to="/">Back to the overview</router-link>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col2 expandOnSmall">
-      <h3 class="left">Create New Listing</h3>
+    <div class="row">
+      <div class="col2 expandOnSmall">
+        <h3 class="left">Create New Listing</h3>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col2 expandOnSmall">
-      <form action="/add" @submit="submitForm" method="post" id="addForm">
-        <div class="row">
-          <div class="col1">
-            <label>Street Name*</label>
-            <input
-              type="text"
-              required
-              v-model="streetName"
-              id="streetName"
-              placeholder="Enter the street name"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col2">
-            <label>House Number*</label>
-            <input
-              type="number"
-              required
-              v-model="houseNumber"
-              min="0"
-              id="houseNumber"
-              placeholder="Enter house number"
-            />
-          </div>
-          <div class="col2">
-            <label>Addition (optional)</label>
-            <input
-              type="text"
-              v-model="numberAddition"
-              id="numberAddition"
-              placeholder="e.g. A"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col1">
-            <label>Postal code*</label>
-            <input
-              type="text"
-              required
-              v-model="zip"
-              id="zip"
-              placeholder="e.g. 1000 AA"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col1">
-            <label>City*</label>
-            <input
-              type="text"
-              required
-              v-model="city"
-              id="city"
-              placeholder="e.g. Utrecht"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col1">
-            <p>Upload image placeholder</p>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col1">
-            <label>Price*</label>
-            <input
-              type="number"
-              required
-              min="0"
-              v-model="price"
-              id="price"
-              placeholder="e.g. €150.000"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col2">
-            <label>Size*</label>
-            <input
-              type="number"
-              required
-              min="0"
-              v-model="size"
-              id="size"
-              placeholder="e.g. 60m2"
-            />
-          </div>
-          <div class="col2">
-            <label>Garage*</label>
-            <select
-              required
-              v-model="hasGarage"
-              id="hasGarage"
-              placeholder="Select"
-            >
-              <option value="Select">Select</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col2">
-            <label>Bedrooms*</label>
-            <input
-              type="number"
-              required
-              v-model="bedrooms"
-              min="0"
-              id="bedrooms"
-              placeholder="Enter amount"
-            />
-          </div>
-          <div class="col2">
-            <label>Bathrooms*</label>
-            <input
-              type="number"
-              required
-              min="0"
-              v-model="bathrooms"
-              id="bathrooms"
-              placeholder="Enter amount"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col1">
-            <label>Construction date*</label>
-            <input
-              type="number"
-              min="0"
-              max="{{ new Date().getFullYear() }}"
-              required
-              v-model="constructionYear"
-              placeholder="e.g. 1990"
-              id="constructionYear"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col1">
-            <label>Description*</label>
-            <textarea
-              rows="4"
-              required
-              v-model="description"
-              id="description"
-              placeholder="Enter description"
-              class="extraLong"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col1">
-            <div v-if="errors.length">
-              <b>Please correct the following error(s):</b>
-              <ul>
-                <li v-for="(error, index) in errors" :key="index">
-                  {{ error }}
-                </li>
-              </ul>
+    <div class="row">
+      <div class="col2 expandOnSmall">
+        <form action="/add" @submit="submitForm" method="post" id="addForm">
+          <div class="row">
+            <div class="col1">
+              <label>Street Name*</label>
+              <input
+                type="text"
+                required
+                v-model="streetName"
+                id="streetName"
+                placeholder="Enter the street name"
+              />
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col1">
-            <input type="submit" value="POST" />
+          <div class="row">
+            <div class="col2">
+              <label>House Number*</label>
+              <input
+                type="number"
+                required
+                v-model="houseNumber"
+                min="0"
+                id="houseNumber"
+                placeholder="Enter house number"
+              />
+            </div>
+            <div class="col2">
+              <label>Addition (optional)</label>
+              <input
+                type="text"
+                v-model="numberAddition"
+                id="numberAddition"
+                placeholder="e.g. A"
+              />
+            </div>
           </div>
-        </div>
-      </form>
+          <div class="row">
+            <div class="col1">
+              <label>Postal code*</label>
+              <input
+                type="text"
+                required
+                v-model="zip"
+                id="zip"
+                placeholder="e.g. 1000 AA"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col1">
+              <label>City*</label>
+              <input
+                type="text"
+                required
+                v-model="city"
+                id="city"
+                placeholder="e.g. Utrecht"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col1">
+              <p>Upload image placeholder</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col1">
+              <label>Price*</label>
+              <input
+                type="number"
+                required
+                min="0"
+                v-model="price"
+                id="price"
+                placeholder="e.g. €150.000"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col2">
+              <label>Size*</label>
+              <input
+                type="number"
+                required
+                min="0"
+                v-model="size"
+                id="size"
+                placeholder="e.g. 60m2"
+              />
+            </div>
+            <div class="col2">
+              <label>Garage*</label>
+              <select
+                required
+                v-model="hasGarage"
+                id="hasGarage"
+                placeholder="Select"
+              >
+                <option value="Select">Select</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col2">
+              <label>Bedrooms*</label>
+              <input
+                type="number"
+                required
+                v-model="bedrooms"
+                min="0"
+                id="bedrooms"
+                placeholder="Enter amount"
+              />
+            </div>
+            <div class="col2">
+              <label>Bathrooms*</label>
+              <input
+                type="number"
+                required
+                min="0"
+                v-model="bathrooms"
+                id="bathrooms"
+                placeholder="Enter amount"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col1">
+              <label>Construction date*</label>
+              <input
+                type="number"
+                min="0"
+                max="{{ new Date().getFullYear() }}"
+                required
+                v-model="constructionYear"
+                placeholder="e.g. 1990"
+                id="constructionYear"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col1">
+              <label>Description*</label>
+              <textarea
+                rows="4"
+                required
+                v-model="description"
+                id="description"
+                placeholder="Enter description"
+                class="extraLong"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col1">
+              <div v-if="errors.length">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                  <li v-for="(error, index) in errors" :key="index">
+                    {{ error }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col1">
+              <input type="submit" value="POST" />
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
