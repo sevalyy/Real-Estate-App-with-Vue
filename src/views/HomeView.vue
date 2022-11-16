@@ -31,6 +31,8 @@ import HouseCard from "@/components/HouseCard.vue";
 export default {
   setup() {
     const store = useStore();
+    store.dispatch("getHouses");
+
     const houses = computed(() => {
       return store.state.houses;
     });
