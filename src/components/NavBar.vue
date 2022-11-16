@@ -16,7 +16,7 @@ export default {};
   align-items: center;
   justify-content: flex-start;
   font-size: 1.2em;
-  padding: 20px 90px;
+  padding: 20px 15%;
   background-color: white;
 }
 
