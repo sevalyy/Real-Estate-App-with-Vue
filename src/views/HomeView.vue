@@ -9,7 +9,10 @@
       </router-link>
     </div>
     <div class="flex">
-      <input placeholder="search for a house" />
+      <!-- <input placeholder="search for a house" /> -->
+
+      <SearchBar v-if="DISPLAY_SEARCH_LIST" />
+      <button @click.prevent="toggleSearchList()">Search for a House</button>
       <div><button>Size</button><button>Price</button></div>
     </div>
 
@@ -27,7 +30,9 @@
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import { mapGetters } from "vuex";
 import HouseCard from "@/components/HouseCard.vue";
+import SearchBar from "../components/SearchBar.vue";
 export default {
   setup() {
     const store = useStore();
@@ -39,7 +44,17 @@ export default {
 
     return { houses };
   },
-  components: { HouseCard },
+  components: { HouseCard, SearchBar },
+  computed: {
+    // use getters first
+    ...mapGetters(["DISPLAY_SEARCH_LIST"]),
+  },
+  methods: {
+    // set the list with this methode
+    toggleSearchList() {
+      this.$store.commit("SET_DISPLAY_SEARCH_LIST", !this.DISPLAY_SEARCH_LIST);
+    },
+  },
 };
 </script>
 
@@ -53,6 +68,8 @@ export default {
   justify-content: space-between;
   background-color: white;
   margin: 20px 50px;
+  text-decoration: none;
+  color: black;
 }
 .flex {
   display: flex;

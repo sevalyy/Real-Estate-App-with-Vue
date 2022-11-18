@@ -265,11 +265,14 @@ export default {
   background-image: linear-gradient(
       to right,
       rgba(255, 255, 255) 0%,
-      rgba(255, 255, 255) 35%,
+      rgba(255, 255, 255) 50%,
       transparent 80%
     ),
     url("../assets/houseDTT.jpeg");
   height: 100vh;
+  background-size: cover;
+
+  padding-left: 15%;
 }
 .left {
   float: left;

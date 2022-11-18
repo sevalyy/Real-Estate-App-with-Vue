@@ -3,11 +3,19 @@ import axios from "axios";
 export default createStore({
   state: {
     houses: [],
+    displaySearchList: false,
   },
-  getters: {},
+  getters: {
+    DISPLAY_SEARCH_LIST: (state) => {
+      return state.displaySearchList;
+    },
+  },
   mutations: {
     setHouses(state, houses) {
       state.houses = houses;
+    },
+    SET_DISPLAY_SEARCH_LIST: (state, payload) => {
+      state.displaySearchList = payload;
     },
   },
   actions: {
