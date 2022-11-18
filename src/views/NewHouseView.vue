@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container">
     <div class="row">
       <div class="col2 expandOnSmall">
         <router-link class="left" to="/">Back to the overview</router-link>
@@ -261,6 +261,16 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255) 0%,
+      rgba(255, 255, 255) 35%,
+      transparent 80%
+    ),
+    url("../assets/houseDTT.jpeg");
+  height: 100vh;
+}
 .left {
   float: left;
 }
@@ -339,5 +349,14 @@ input[type="submit"] {
   color: white;
   background-color: rgb(223, 88, 9);
   font-weight: bold;
+}
+.houseBackground {
+  background-image: url("../assets/houseDTT.jpeg");
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 </style>
