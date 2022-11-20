@@ -9,13 +9,11 @@
       </router-link>
     </div>
     <div class="flex">
-      <!-- <input placeholder="search for a house" /> -->
+      <input placeholder="search for a house" v-model.trim="seachText" />
 
-      <SearchBar v-if="DISPLAY_SEARCH_LIST" />
-      <button @click.prevent="toggleSearchList()">Search for a House</button>
       <div><button>Size</button><button>Price</button></div>
     </div>
-
+    <div v-if="houses.length === 0">Not found</div>
     <router-link
       :to="{ name: 'housedetails', params: { id: house.id } }"
       class="main"
@@ -29,32 +27,36 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed } from "vue";
-import { mapGetters } from "vuex";
 import HouseCard from "@/components/HouseCard.vue";
-import SearchBar from "../components/SearchBar.vue";
+
 export default {
   setup() {
     const store = useStore();
     store.dispatch("initializeHouses");
-
-    const houses = computed(() => {
-      return store.state.houses;
-    });
-
-    return { houses };
   },
-  components: { HouseCard, SearchBar },
+
+  data: function () {
+    return {
+      seachText: "",
+    };
+  },
   computed: {
-    // use getters first
-    ...mapGetters(["DISPLAY_SEARCH_LIST"]),
-  },
-  methods: {
-    // set the list with this methode
-    toggleSearchList() {
-      this.$store.commit("SET_DISPLAY_SEARCH_LIST", !this.DISPLAY_SEARCH_LIST);
+    houses() {
+      const store = useStore();
+      const all = store.state.houses;
+      if (this.seachText.length > 0) {
+        return all.filter((house) => {
+          const houseSearchText = house.size + house.location.street;
+          return houseSearchText
+            .toLowerCase()
+            .includes(this.seachText.toLowerCase());
+        });
+      }
+      return all;
     },
   },
+  components: { HouseCard },
+  methods: {},
 };
 </script>
 
@@ -68,8 +70,6 @@ export default {
   justify-content: space-between;
   background-color: white;
   margin: 20px 50px;
-  text-decoration: none;
-  color: black;
 }
 .flex {
   display: flex;
