@@ -11,7 +11,10 @@
     <div class="flex">
       <input placeholder="search for a house" v-model.trim="searchText" />
 
-      <div><button>Size</button><button>Price</button></div>
+      <div>
+        <button @click="sortByPrice">Price</button>
+        <button @click="sortBySize">Size</button>
+      </div>
     </div>
     <div v-if="houses.length === 0">
       <div>
@@ -22,7 +25,7 @@
     <router-link
       :to="{ name: 'housedetails', params: { id: house.id } }"
       class="main"
-      v-for="house in houses"
+      v-for="house in sortedHouses"
       :key="house.id"
     >
       <HouseCard :house="house" />
@@ -43,6 +46,7 @@ export default {
   data: function () {
     return {
       searchText: "",
+      sortBy: "price",
     };
   },
   computed: {
@@ -50,9 +54,23 @@ export default {
       const store = useStore();
       return store.getters.getBySearchText(this.searchText);
     },
+    sortedHouses: function () {
+      if (this.sortBy === "price") {
+        return [...this.houses].sort((a, b) => a.price - b.price);
+      } else {
+        return [...this.houses].sort((a, b) => a.size - b.size);
+      }
+    },
   },
   components: { HouseCard },
-  methods: {},
+  methods: {
+    sortByPrice() {
+      this.sortBy = "price";
+    },
+    sortBySize() {
+      this.sortBy = "size";
+    },
+  },
 };
 </script>
 
@@ -111,7 +129,7 @@ input {
   font-size: 15px;
 }
 img {
-  width: 40%;
+  width: 50%;
   margin-top: 30px;
 }
 </style>
