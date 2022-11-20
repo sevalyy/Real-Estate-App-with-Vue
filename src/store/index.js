@@ -4,7 +4,25 @@ export default createStore({
   state: {
     houses: [],
   },
-  getters: {},
+  getters: {
+    getBySearchText: (state) => (searchText) => {
+      const all = state.houses;
+      if (searchText.length > 0) {
+        return all.filter((house) => {
+          const houseSearchText =
+            house.location.street +
+            house.price +
+            house.location.zip +
+            house.location.city +
+            house.size;
+          return houseSearchText
+            .toLowerCase()
+            .includes(searchText.toLowerCase());
+        });
+      }
+      return all;
+    },
+  },
   mutations: {
     setHouses(state, houses) {
       state.houses = houses;

@@ -9,11 +9,16 @@
       </router-link>
     </div>
     <div class="flex">
-      <input placeholder="search for a house" v-model.trim="seachText" />
+      <input placeholder="search for a house" v-model.trim="searchText" />
 
       <div><button>Size</button><button>Price</button></div>
     </div>
-    <div v-if="houses.length === 0">Not found</div>
+    <div v-if="houses.length === 0">
+      <div>
+        <img src="../assets/no-result-found.webp" />
+        <p>Please try another keyword</p>
+      </div>
+    </div>
     <router-link
       :to="{ name: 'housedetails', params: { id: house.id } }"
       class="main"
@@ -37,22 +42,13 @@ export default {
 
   data: function () {
     return {
-      seachText: "",
+      searchText: "",
     };
   },
   computed: {
     houses() {
       const store = useStore();
-      const all = store.state.houses;
-      if (this.seachText.length > 0) {
-        return all.filter((house) => {
-          const houseSearchText = house.size + house.location.street;
-          return houseSearchText
-            .toLowerCase()
-            .includes(this.seachText.toLowerCase());
-        });
-      }
-      return all;
+      return store.getters.getBySearchText(this.searchText);
     },
   },
   components: { HouseCard },
@@ -70,6 +66,8 @@ export default {
   justify-content: space-between;
   background-color: white;
   margin: 20px 50px;
+  text-decoration: none;
+  color: black;
 }
 .flex {
   display: flex;
@@ -111,5 +109,9 @@ input {
 
 .small {
   font-size: 15px;
+}
+img {
+  width: 40%;
+  margin-top: 30px;
 }
 </style>
