@@ -10,6 +10,7 @@
             type="text"
             name="email"
             placeholder="email@adress.com"
+            v-model="email"
           />
         </div>
         <div class="input">
@@ -19,6 +20,7 @@
             type="text"
             name="text"
             placeholder="Jane Doe"
+            v-model="name"
           />
         </div>
 
@@ -36,7 +38,6 @@ export default {
 
   data() {
     return {
-      users: [],
       email: "",
       name: "",
     };
@@ -44,22 +45,21 @@ export default {
 
   methods: {
     handleSubmit() {
+      const loginData = new FormData();
+      loginData.append("email", this.email);
+      loginData.append("name", this.name);
+
       axios
-
-        .post("https://api.intern.d-tt.nl/api/register", {
-          name: this.name,
-
-          email: this.email,
+        .post("https://api.intern.d-tt.nl/api/register", loginData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
-
         .then((response) => {
-          const data = response.data;
-
-          this.users.push(data);
-
-          this.name = "";
-
-          this.email = "";
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log("error", error);
         });
     },
   },
