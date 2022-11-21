@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <form @submit.prevent="handleSubmit">
-        <h2>Register</h2>
+        <h2>Register / Login</h2>
         <div class="input">
           <label for="email">Email address: </label>
           <input
@@ -24,15 +24,13 @@
           />
         </div>
 
-        <button type="submit" class="btn-search">Register</button>
+        <button type="submit" class="btn-search">Submit</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "PostPage",
 
@@ -45,22 +43,10 @@ export default {
 
   methods: {
     handleSubmit() {
-      const loginData = new FormData();
-      loginData.append("email", this.email);
-      loginData.append("name", this.name);
-
-      axios
-        .post("https://api.intern.d-tt.nl/api/register", loginData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+      this.$store.dispatch("initializeToken", {
+        email: this.email,
+        name: this.name,
+      });
     },
   },
 };
