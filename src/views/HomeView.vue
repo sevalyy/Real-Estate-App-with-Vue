@@ -2,7 +2,6 @@
   <div class="container">
     <div class="flex">
       <h2>Houses</h2>
-
       <router-link to="/newhouse" class="create">
         <span class="material-symbols-outlined small"> add </span>
         CREATE NEW
@@ -16,7 +15,11 @@
         <button @click="sortBySize">Size</button>
       </div>
     </div>
-    <div v-if="houses.length === 0">
+    <h3 v-if="loadingState">LOADING</h3>
+    <h3 v-if="loadingError" style="color: red">
+      An error occured: {{ loadingError }}
+    </h3>
+    <div v-if="houses.length === 0 && !loadingState && !loadingError">
       <div>
         <img src="../assets/no-result-found.webp" />
         <p>Please try another keyword</p>
@@ -36,15 +39,21 @@
 <script>
 import { useStore } from "vuex";
 import HouseCard from "@/components/HouseCard.vue";
-
 export default {
-  setup() {
+  mounted() {
     const store = useStore();
-    store.dispatch("initializeHouses");
+    store
+      .dispatch("initializeHouses")
+      .catch(
+        (errorMessage) =>
+          (this.loadingError = "Loading content failed:" + errorMessage)
+      )
+      .finally(() => (this.loadingState = false));
   },
-
   data: function () {
     return {
+      loadingError: null,
+      loadingState: true, //Show loading text at the begining
       searchText: "",
       sortBy: "price",
     };

@@ -30,18 +30,22 @@ export default createStore({
   },
   actions: {
     initializeHouses: function (context) {
-      axios
-        .get(`https://api.intern.d-tt.nl/api/houses`, {
-          headers: {
-            "X-Api-Key": process.env.VUE_APP_API_KEY,
-          },
-        })
-        .then((response) => {
-          context.commit("setHouses", response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`https://api.intern.d-tt.nl/api/houses`, {
+            headers: {
+              "X-Api-Key": process.env.VUE_APP_API_KEY,
+            },
+          })
+          .then((response) => {
+            context.commit("setHouses", response.data);
+            resolve("OK");
+          })
+          .catch((error) => {
+            let message = error.message ? error.message : JSON.stringify(error);
+            reject(message); // show error msg on frontend
+          });
+      });
     },
   },
   modules: {},
