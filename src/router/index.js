@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import NewHouseView from "../views/NewHouseView";
 import HouseDetailsView from "../views/HouseDetailsView";
-import RegisterPage from "../views/RegisterPage";
 
 const routes = [
   {
@@ -29,11 +28,6 @@ const routes = [
     name: "housedetails",
     component: HouseDetailsView,
     props: true,
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: RegisterPage,
   },
 ];
 
