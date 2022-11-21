@@ -26,7 +26,9 @@
   </div>
 
   <div v-if="house.madeByMe">
-    <span class="material-symbols-outlined"> delete </span>
+    <span class="material-symbols-outlined" @click="deleteThisHouse">
+      delete
+    </span>
     <span class="material-symbols-outlined"> edit </span>
   </div>
 </template>
@@ -37,6 +39,11 @@ export default {
     house: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  methods: {
+    deleteThisHouse() {
+      this.$store.dispatch("deleteHouse", this.house.id);
     },
   },
 };
