@@ -218,7 +218,7 @@ export default {
   components: {},
   methods: {
     submitForm: function (e) {
-      const isEmpty = (str) => !str || str.length === 0;
+      const isEmpty = (str) => !str || str.trim().length === 0;
       this.errors = [];
       if (isEmpty(this.streetName)) {
         this.errors.push("Please enter street name");
