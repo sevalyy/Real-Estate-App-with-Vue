@@ -2,7 +2,10 @@
   <div class="container">
     <div class="row">
       <div class="col2 expandOnSmall">
-        <router-link class="left" to="/">Back to the overview</router-link>
+        <router-link class="left" to="/">
+          <span class="material-symbols-outlined"> keyboard_backspace </span>
+          Back Back to the overview</router-link
+        >
       </div>
     </div>
     <div class="row">
@@ -73,7 +76,9 @@
           </div>
           <div class="row">
             <div class="col1">
-              <p>Upload image placeholder</p>
+              <label>Upload picture (PNG or JPG)*</label>
+              <br />
+              <PhotoCard />
             </div>
           </div>
 
@@ -179,12 +184,16 @@
                   </li>
                 </ul>
               </div>
+              <div v-if="successMessage">
+                <h3>{{ successMessage }}</h3>
+              </div>
             </div>
           </div>
           <div class="row">
-            <div class="col1">
+            <div class="col1" v-if="!inSaving">
               <input type="submit" value="POST" />
             </div>
+            <div class="col1" v-if="inSaving">Saving...</div>
           </div>
         </form>
       </div>
@@ -193,10 +202,14 @@
 </template>
 
 <script>
+import PhotoCard from "@/components/PhotoCard.vue";
 export default {
   name: "HomeView",
+
   data() {
     return {
+      inSaving: false,
+      successMessage: null,
       price: null,
       bedrooms: null,
       bathrooms: null,
@@ -215,9 +228,11 @@ export default {
       uploadPath: "",
     };
   },
-  components: {},
+  components: { PhotoCard },
   methods: {
     submitForm: function (e) {
+      e.preventDefault();
+
       const isEmpty = (str) => !str || str.trim().length === 0;
       this.errors = [];
       if (isEmpty(this.streetName)) {
@@ -248,13 +263,42 @@ export default {
         this.errors.push("Please enter how many bathrooms does the house have");
       }
       if (!this.constructionYear) {
+        //Range ekle
         this.errors.push("Please enter construction year");
       }
       if (isEmpty(this.description)) {
         this.errors.push("Please enter description");
       }
       console.log("Errors has", this.errors.length);
-      e.preventDefault();
+
+      if (this.errors.length) return;
+
+      this.inSaving = true;
+      this.$store
+        .dispatch("addHouse", {
+          price: this.price,
+          bedrooms: this.bedrooms,
+          bathrooms: this.bathrooms,
+          size: this.size,
+          streetName: this.streetName,
+          houseNumber: this.houseNumber,
+          numberAddition: this.numberAddition,
+          zip: this.zip,
+          city: this.city,
+          constructionYear: this.constructionYear,
+          hasGarage: this.hasGarage,
+          description: this.description,
+        })
+        .then((createdHouse) => {
+          this.successMessage = "House created with id " + createdHouse.id;
+          //TODO Upload pics
+          this.inSaving = false;
+          //Clear form
+        })
+        .catch((error) => {
+          this.errors = ["Saving failed:" + error];
+          this.inSaving = false;
+        });
     },
   },
 };
@@ -276,6 +320,8 @@ export default {
 }
 .left {
   float: left;
+  text-decoration: none;
+  color: black;
 }
 
 input[type="text"],
