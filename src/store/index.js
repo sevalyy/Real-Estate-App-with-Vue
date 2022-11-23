@@ -3,6 +3,7 @@ import axios from "axios";
 export default createStore({
   state: {
     houses: [],
+    housesLoaded: false,
   },
   getters: {
     getBySearchText: (state) => (searchText) => {
@@ -26,6 +27,7 @@ export default createStore({
   mutations: {
     setHouses: function (state, houses) {
       state.houses = houses;
+      state.housesLoaded = true;
     },
     removeHouse: function (state, id) {
       state.houses = state.houses.filter((h) => h.id !== id);
@@ -36,22 +38,32 @@ export default createStore({
   },
   actions: {
     initializeHouses: function (context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`https://api.intern.d-tt.nl/api/houses`, {
-            headers: {
-              "X-Api-Key": process.env.VUE_APP_API_KEY,
-            },
-          })
-          .then((response) => {
-            context.commit("setHouses", response.data);
-            resolve("OK");
-          })
-          .catch((error) => {
-            let message = error.message ? error.message : JSON.stringify(error);
-            reject(message); // show error msg on frontend
-          });
-      });
+      if (context.state.housesLoaded) {
+        return new Promise((resolve) => {
+          console.log("Houses already loaded");
+          resolve("OK");
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          axios
+            .get(`https://api.intern.d-tt.nl/api/houses`, {
+              headers: {
+                "X-Api-Key": process.env.VUE_APP_API_KEY,
+              },
+            })
+            .then((response) => {
+              console.log("Loaded from remote");
+              context.commit("setHouses", response.data);
+              resolve("OK");
+            })
+            .catch((error) => {
+              let message = error.message
+                ? error.message
+                : JSON.stringify(error);
+              reject(message); // show error msg on frontend
+            });
+        });
+      }
     },
     deleteHouse: function (context, id) {
       const config = {
