@@ -78,7 +78,7 @@
             <div class="col1">
               <label>Upload picture (PNG or JPG)*</label>
               <br />
-              <PhotoCard />
+              <PhotoCard ref="photoCard" />
             </div>
           </div>
 
@@ -204,8 +204,7 @@
 <script>
 import PhotoCard from "@/components/PhotoCard.vue";
 export default {
-  name: "HomeView",
-
+  name: "NewHouseView",
   data() {
     return {
       inSaving: false,
@@ -274,6 +273,7 @@ export default {
       if (this.errors.length) return;
 
       this.inSaving = true;
+
       this.$store
         .dispatch("addHouse", {
           price: this.price,
@@ -291,7 +291,10 @@ export default {
         })
         .then((createdHouse) => {
           this.successMessage = "House created with id " + createdHouse.id;
-          //TODO Upload pics
+
+          //for reaching the child's functions
+          this.$refs.photoCard.doSave(createdHouse.id);
+
           this.inSaving = false;
           //Clear form
         })

@@ -1,12 +1,15 @@
 <template>
   <div id="preview">
     <img v-if="item.imageUrl" :src="item.imageUrl" />
-    <p v-if="item.imageUrl">Succesfully uploaded!</p>
+    <p v-if="item.imageUrl">Photo Added</p>
   </div>
-  <input type="file" accept="image/*" @change="onChange" />
+  <label for="upload" v-if="!item.imageUrl">+</label>
+  <input type="file" accept="image/*" @change="onChange" id="upload" hidden />
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -22,26 +25,28 @@ export default {
       this.image = file;
       this.item.imageUrl = URL.createObjectURL(file);
     },
+    doSave(houseId) {
+      console.log("Do Save Executed", houseId);
+      const data = new FormData();
+      data.append("image", this.image);
+
+      let config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "X-Api-Key": process.env.VUE_APP_API_KEY,
+        },
+      };
+      axios
+        .post(
+          "https://api.intern.d-tt.nl/api/houses/" + houseId + "/upload",
+          data,
+          config
+        )
+        .then((response) => {
+          console.log("image upload response > ", response);
+        });
+    },
   },
-  // methods: {
-  //   uploadImage(event) {
-  //     let data = new FormData();
-  //     data.append("name", "my-picture");
-  //     data.append("file", event.target.files[0]);
-
-  //     let config = {
-  //       header: {
-  //         "Content-Type": "image/png",
-  //         "X-Api-Key": process.env.VUE_APP_API_KEY,
-  //       },
-  //     };
-
-  //     axios
-  //       .post("https://api.intern.d-tt.nl/api/houses//upload", data, config)
-  //       .then((response) => {
-  //         console.log("image upload response > ", response);
-  //       });
-  //   },
 };
 </script>
 
@@ -51,7 +56,16 @@ img {
   height: auto;
 
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 10px auto;
+}
+label {
+  border: 2px dotted darkgray;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 2.5rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
 }
 </style>
