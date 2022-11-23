@@ -289,19 +289,28 @@ export default {
           hasGarage: this.hasGarage,
           description: this.description,
         })
-        .then((createdHouse) => {
+        .then(async (createdHouse) => {
           this.successMessage = "House created with id " + createdHouse.id;
 
           //for reaching the child's functions
-          this.$refs.photoCard.doSave(createdHouse.id);
+          try {
+            await this.$refs.photoCard.doSave(createdHouse.id);
+            this.$router.push({ path: "/housedetails/" + createdHouse.id });
+          } catch (e) {
+            console.log(e, "error while image uploding");
+            this.errors = [
+              "image cannot uploaded:",
+              e.message ? e.message : JSON.stringify(e),
+            ];
+          }
 
           this.inSaving = false;
-          //Clear form
         })
         .catch((error) => {
           this.errors = ["Saving failed:" + error];
           this.inSaving = false;
         });
+      // redirect to homepage
     },
   },
 };

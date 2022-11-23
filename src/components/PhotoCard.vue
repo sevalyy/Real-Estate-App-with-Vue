@@ -25,7 +25,7 @@ export default {
       this.image = file;
       this.item.imageUrl = URL.createObjectURL(file);
     },
-    doSave(houseId) {
+    async doSave(houseId) {
       console.log("Do Save Executed", houseId);
       const data = new FormData();
       data.append("image", this.image);
@@ -36,15 +36,11 @@ export default {
           "X-Api-Key": process.env.VUE_APP_API_KEY,
         },
       };
-      axios
-        .post(
-          "https://api.intern.d-tt.nl/api/houses/" + houseId + "/upload",
-          data,
-          config
-        )
-        .then((response) => {
-          console.log("image upload response > ", response);
-        });
+      await axios.post(
+        "https://api.intern.d-tt.nl/api/houses/" + houseId + "/upload",
+        data,
+        config
+      );
     },
   },
 };
