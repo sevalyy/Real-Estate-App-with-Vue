@@ -25,14 +25,10 @@
         <p>Please try another keyword</p>
       </div>
     </div>
-    <router-link
-      :to="{ name: 'housedetails', params: { id: house.id } }"
-      class="main"
-      v-for="house in sortedHouses"
-      :key="house.id"
-    >
+
+    <div class="main" v-for="house in sortedHouses" :key="house.id">
       <HouseCard :house="house" />
-    </router-link>
+    </div>
   </div>
 </template>
 
