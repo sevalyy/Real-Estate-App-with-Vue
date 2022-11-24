@@ -38,13 +38,21 @@
       </div>
       <div>{{ house.description }}</div>
     </div>
-    <div v-if="house" class="col2">Recommended {{ house.size }}</div>
+    <div class="col2">
+      <div>
+        <h2>Recommended</h2>
+        <div class="main" v-for="house in houses.slice(0, 3)" :key="house.id">
+          <HouseCard :house="house" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
+import HouseCard from "@/components/HouseCard.vue";
 
 export default {
   props: ["id"],
@@ -55,16 +63,27 @@ export default {
     const house = computed(() => {
       return store.state.houses.find((h) => h.id == props.id);
     });
+    const houses = store.state.houses;
 
-    return { house };
+    return { house, houses };
+  },
+  components: {
+    HouseCard,
+  },
+  mounted() {
+    const store = useStore();
+    store
+      .dispatch("initializeHouses")
+      .catch(
+        (errorMessage) =>
+          (this.loadingError = "Loading content failed:" + errorMessage)
+      )
+      .finally(() => (this.loadingState = false));
   },
 };
 </script>
 
 <style scoped>
-.container {
-  background-color: black;
-}
 .row {
   float: left;
   width: 100%;
@@ -87,9 +106,9 @@ export default {
 }
 .col2 {
   float: left;
-  width: 20%;
+  width: 30%;
   display: inline;
-  margin: 0 15% 5% 5%;
+  margin: 0 5% 5% 5%;
 }
 .bigImage {
   width: 100%;
