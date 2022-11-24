@@ -22,6 +22,9 @@ export default createStore({
       }
       return all;
     },
+    getAll: (state) => () => {
+      return state.houses;
+    },
   },
   mutations: {
     setHouses: function (state, houses) {

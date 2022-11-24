@@ -5,18 +5,19 @@
       to the overview</router-link
     >
   </div>
-  <div class="row">
+  <div class="row" v-if="loadingState">Loading.</div>
+  <div class="row" v-if="!loadingState && house">
     <div class="col1">
-      <div>
+      <div v-if="house.image">
         <img alt="house photo" :src="house.image" class="bigImage" />
       </div>
 
       <div>
-        <h2>{{ house.location.street }}</h2>
+        <h2>{{ house.location?.street }}</h2>
       </div>
       <div>
         <span class="material-symbols-outlined"> location_on </span>
-        {{ house.location.zip }} {{ house.location.city }}
+        {{ house.location?.zip }} {{ house.location?.city }}
       </div>
       <div>
         <span class="material-symbols-outlined"> euro_symbol </span>
@@ -51,24 +52,14 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed } from "vue";
 import HouseCard from "@/components/HouseCard.vue";
 
 export default {
   props: ["id"],
-  setup(props) {
-    const store = useStore();
-    store.dispatch("initializeHouses");
-
-    const house = computed(() => {
-      return store.state.houses.find((h) => h.id == props.id);
-    });
-    const houses = store.state.houses;
-
-    return { house, houses };
-  },
-  components: {
-    HouseCard,
+  data: function () {
+    return {
+      loadingState: true, //Show loading text at the begining
+    };
   },
   mounted() {
     const store = useStore();
@@ -78,7 +69,20 @@ export default {
         (errorMessage) =>
           (this.loadingError = "Loading content failed:" + errorMessage)
       )
+
       .finally(() => (this.loadingState = false));
+  },
+  components: {
+    HouseCard,
+  },
+  computed: {
+    houses: function () {
+      const store = useStore();
+      return store.getters.getAll();
+    },
+    house: function () {
+      return this.houses.find((h) => h.id == this.id);
+    },
   },
 };
 </script>

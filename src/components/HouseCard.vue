@@ -3,23 +3,23 @@
     :to="{ name: 'housedetails', params: { id: house.id } }"
     class="main"
   >
-    <div class="card">
-      <img alt="house photo" :src="house.image" />
+    <div class="card" v-if="house">
+      <img alt="house photo" :src="house?.image" />
       <div class="info">
-        <p class="boldText">{{ house.location.street }}</p>
+        <p class="boldText">{{ house.location?.street }}</p>
         <p>€ {{ house.price }}</p>
         <div class="flex">
-          <p class="lightText">{{ house.location.zip }}</p>
-          <p class="lightText">{{ house.location.city }}</p>
+          <p class="lightText">{{ house.location?.zip }}</p>
+          <p class="lightText">{{ house.location?.city }}</p>
         </div>
         <div class="flex">
           <p>
             <span class="material-symbols-outlined"> bathtub </span
-            >{{ house.rooms.bathrooms }}
+            >{{ house.rooms?.bathrooms }}
           </p>
           <p>
             <span class="material-symbols-outlined"> bed </span
-            >{{ house.rooms.bedrooms }}
+            >{{ house.rooms?.bedrooms }}
           </p>
           <p>
             <span class="material-symbols-outlined"> square </span>
@@ -74,7 +74,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 40px;
+  margin: 10px 0px;
   padding: 10px;
 }
 .flex {
@@ -96,6 +96,7 @@ img {
 }
 .info {
   text-align: left;
+  font-size: 1vw;
 }
 .tooltip {
   position: relative;
