@@ -10,7 +10,8 @@
     </div>
     <div class="row">
       <div class="col2 expandOnSmall">
-        <h3 class="left">Create New Listing</h3>
+        <h3 v-if="!id" class="left">Create New Listing</h3>
+        <h3 v-if="id" class="left">Update House</h3>
       </div>
     </div>
     <div class="row">
@@ -22,7 +23,7 @@
               <input
                 type="text"
                 required
-                v-model="streetName"
+                v-model="house.streetName"
                 id="streetName"
                 placeholder="Enter the street name"
               />
@@ -34,7 +35,7 @@
               <input
                 type="number"
                 required
-                v-model="houseNumber"
+                v-model="house.houseNumber"
                 min="0"
                 id="houseNumber"
                 placeholder="Enter house number"
@@ -44,7 +45,7 @@
               <label>Addition (optional)</label>
               <input
                 type="text"
-                v-model="numberAddition"
+                v-model="house.numberAddition"
                 id="numberAddition"
                 placeholder="e.g. A"
               />
@@ -56,7 +57,7 @@
               <input
                 type="text"
                 required
-                v-model="zip"
+                v-model="house.zip"
                 id="zip"
                 placeholder="e.g. 1000 AA"
               />
@@ -68,7 +69,7 @@
               <input
                 type="text"
                 required
-                v-model="city"
+                v-model="house.city"
                 id="city"
                 placeholder="e.g. Utrecht"
               />
@@ -89,7 +90,7 @@
                 type="number"
                 required
                 min="0"
-                v-model="price"
+                v-model="house.price"
                 id="price"
                 placeholder="e.g. €150.000"
               />
@@ -102,7 +103,7 @@
                 type="number"
                 required
                 min="0"
-                v-model="size"
+                v-model="house.size"
                 id="size"
                 placeholder="e.g. 60m2"
               />
@@ -111,7 +112,7 @@
               <label>Garage*</label>
               <select
                 required
-                v-model="hasGarage"
+                v-model="house.hasGarage"
                 id="hasGarage"
                 placeholder="Select"
               >
@@ -127,7 +128,7 @@
               <input
                 type="number"
                 required
-                v-model="bedrooms"
+                v-model="house.bedrooms"
                 min="0"
                 id="bedrooms"
                 placeholder="Enter amount"
@@ -139,7 +140,7 @@
                 type="number"
                 required
                 min="0"
-                v-model="bathrooms"
+                v-model="house.bathrooms"
                 id="bathrooms"
                 placeholder="Enter amount"
               />
@@ -154,7 +155,7 @@
                 min="0"
                 max="{{ new Date().getFullYear() }}"
                 required
-                v-model="constructionYear"
+                v-model="house.constructionYear"
                 placeholder="e.g. 1990"
                 id="constructionYear"
               />
@@ -167,7 +168,7 @@
               <textarea
                 rows="4"
                 required
-                v-model="description"
+                v-model="house.description"
                 id="description"
                 placeholder="Enter description"
                 class="extraLong"
@@ -203,10 +204,13 @@
 
 <script>
 import PhotoCard from "@/components/PhotoCard.vue";
+import { useStore } from "vuex";
 export default {
   name: "NewHouseView",
+  props: ["id"],
   data() {
     return {
+      loadingState: true,
       inSaving: false,
       successMessage: null,
       price: null,
@@ -222,50 +226,118 @@ export default {
       hasGarage: "Select",
       description: "",
       errors: [],
-      imgError: null,
-      media: [],
-      uploadPath: "",
     };
   },
   components: { PhotoCard },
+  mounted() {
+    if (this.id) {
+      const store = useStore();
+      store
+        .dispatch("initializeHouses")
+        .catch(
+          (errorMessage) =>
+            (this.loadingError = "Loading content failed:" + errorMessage)
+        )
+
+        .finally(() => (this.loadingState = false));
+    } else {
+      this.loadingState = false;
+    }
+  },
+  computed: {
+    houses: function () {
+      const store = useStore();
+      return store.getters.getAll();
+    },
+    house: function () {
+      if (this.id && this.houses.length > 0) {
+        const houseToUpdate = this.houses.find((h) => h.id == this.id);
+        const parseAddress = (adr) => {
+          if (!adr) return {};
+          const indexFirstNumber = adr.search(/\d/);
+          const street = adr.substring(0, indexFirstNumber).trim();
+
+          const rest = adr.substring(indexFirstNumber);
+          const firstNonDigitIndex = rest.search(/\D/);
+          const number = rest.substring(0, firstNonDigitIndex).trim();
+          const additional = rest.substring(firstNonDigitIndex).trim();
+
+          return { street, number, additional };
+        };
+        const addressData = parseAddress(houseToUpdate.location?.street);
+        return {
+          id: houseToUpdate.id,
+          price: houseToUpdate.price,
+          bedrooms: houseToUpdate.rooms?.bedrooms,
+          bathrooms: houseToUpdate.rooms?.bathrooms,
+          size: houseToUpdate.size,
+          streetName: addressData.street,
+          houseNumber: addressData.number,
+          numberAddition: addressData.additional,
+          zip: houseToUpdate.location?.zip,
+          city: houseToUpdate.location?.city,
+          constructionYear: houseToUpdate.constructionYear,
+          hasGarage: houseToUpdate.hasGarage,
+          description: houseToUpdate.description,
+        };
+      } else
+        return {
+          price: null,
+          bedrooms: null,
+          bathrooms: null,
+          size: null,
+          streetName: "",
+          houseNumber: null,
+          numberAddition: null,
+          zip: "",
+          city: "",
+          constructionYear: null,
+          hasGarage: "Select",
+          description: "",
+        };
+    },
+  },
   methods: {
     submitForm: function (e) {
       e.preventDefault();
 
       const isEmpty = (str) => !str || str.trim().length === 0;
       this.errors = [];
-      if (isEmpty(this.streetName)) {
+      if (isEmpty(this.house.streetName)) {
         this.errors.push("Please enter street name");
       }
-      if (!this.houseNumber) {
+      if (!this.house.houseNumber) {
         this.errors.push("Please enter house number");
       }
-      if (isEmpty(this.zip)) {
+      if (isEmpty(this.house.zip)) {
         this.errors.push("Please enter postal code");
       }
-      if (isEmpty(this.city)) {
+      if (isEmpty(this.house.city)) {
         this.errors.push("Please enter city");
       }
-      if (!this.price) {
+      if (!this.house.price) {
         this.errors.push("Please enter price");
       }
-      if (!this.size) {
+      if (!this.house.size) {
         this.errors.push("Please enter size");
       }
-      if (!this.hasGarage || this.hasGarage === "Select") {
+      if (
+        this.house.hasGarage === undefined ||
+        this.house.hasGarage === "Select"
+      ) {
         this.errors.push("Please select if there is garage");
       }
-      if (!this.bedrooms) {
+      if (!this.house.bedrooms) {
         this.errors.push("Please enter how many bedrooms does the house have");
       }
-      if (!this.bathrooms) {
+      if (!this.house.bathrooms) {
         this.errors.push("Please enter how many bathrooms does the house have");
       }
-      if (!this.constructionYear) {
+      if (!this.house.constructionYear) {
         //Range ekle
         this.errors.push("Please enter construction year");
       }
-      if (isEmpty(this.description)) {
+      if (isEmpty(this.house.description)) {
         this.errors.push("Please enter description");
       }
       console.log("Errors has", this.errors.length);
@@ -276,32 +348,27 @@ export default {
 
       this.$store
         .dispatch("addHouse", {
-          price: this.price,
-          bedrooms: this.bedrooms,
-          bathrooms: this.bathrooms,
-          size: this.size,
-          streetName: this.streetName,
-          houseNumber: this.houseNumber,
-          numberAddition: this.numberAddition,
-          zip: this.zip,
-          city: this.city,
-          constructionYear: this.constructionYear,
-          hasGarage: this.hasGarage,
-          description: this.description,
+          ...this.house,
         })
-        .then(async (createdHouse) => {
-          this.successMessage = "House created with id " + createdHouse.id;
+        .then(async (createdHouseId) => {
+          if (this.house.id) {
+            this.successMessage = "House updated with id " + createdHouseId;
+          } else {
+            this.successMessage = "House created with id " + createdHouseId;
+          }
 
-          //for reaching the child's functions
-          try {
-            await this.$refs.photoCard.doSave(createdHouse.id);
-            this.$router.push({ path: "/housedetails/" + createdHouse.id });
-          } catch (e) {
-            console.log(e, "error while image uploding");
-            this.errors = [
-              "image cannot uploaded:",
-              e.message ? e.message : JSON.stringify(e),
-            ];
+          //Only upload if house is new
+          if (!this.house.id) {
+            try {
+              await this.$refs.photoCard.doSave(createdHouseId);
+              this.$router.push({ path: "/housedetails/" + createdHouseId });
+            } catch (e) {
+              console.log(e, "error while image uploding");
+              this.errors = [
+                "image cannot uploaded:",
+                e.message ? e.message : JSON.stringify(e),
+              ];
+            }
           }
 
           this.inSaving = false;
@@ -310,7 +377,6 @@ export default {
           this.errors = ["Saving failed:" + error];
           this.inSaving = false;
         });
-      // redirect to homepage
     },
   },
 };
@@ -329,6 +395,8 @@ export default {
   background-size: cover;
 
   padding-left: 15%;
+
+  background-attachment: fixed;
 }
 .left {
   float: left;
@@ -410,14 +478,5 @@ input[type="submit"] {
   color: white;
   background-color: rgb(223, 88, 9);
   font-weight: bold;
-}
-.houseBackground {
-  background-image: url("../assets/houseDTT.jpeg");
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 75%,
-    rgba(0, 0, 0, 0) 100%
-  );
 }
 </style>
