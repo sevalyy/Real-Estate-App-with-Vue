@@ -89,10 +89,16 @@ export default createStore({
       data.append("constructionYear", house.constructionYear);
       data.append("hasGarage", house.hasGarage);
       data.append("description", house.description);
-
+      const isUpdate = house.id ? true : false;
+      if (isUpdate) {
+        data.append("id", house.id);
+      }
+      const targetUrl = isUpdate
+        ? "https://api.intern.d-tt.nl/api/houses/" + house.id
+        : "https://api.intern.d-tt.nl/api/houses";
       return new Promise((resolve, reject) => {
         axios
-          .post("https://api.intern.d-tt.nl/api/houses", data, {
+          .post(targetUrl, data, {
             headers: {
               "Content-Type": "multipart/form-data",
               "X-Api-Key": process.env.VUE_APP_API_KEY,
@@ -101,12 +107,20 @@ export default createStore({
           .then((response) => {
             //Get the new house from response which contains id, madeByMe
             const createdHouse = response.data;
-            if (createdHouse && createdHouse.id) {
-              console.log(createdHouse);
-              context.commit("newHouse", createdHouse);
-              resolve(createdHouse);
+            if (isUpdate) {
+              if (response.status === 204) {
+                resolve(house.id);
+              } else {
+                reject("Status: " + response.status);
+              }
             } else {
-              reject("Server did not return with success"); // show error msg on frontend
+              if (createdHouse && createdHouse.id) {
+                console.log(createdHouse);
+                context.commit("newHouse", createdHouse);
+                resolve(createdHouse.id);
+              } else {
+                reject("Server did not return with success"); // show error msg on frontend
+              }
             }
           })
           .catch(function (error) {
