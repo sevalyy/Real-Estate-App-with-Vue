@@ -34,7 +34,12 @@
       <span class="material-symbols-outlined">delete</span>
       <span class="tooltiptext">Delete this house</span>
     </p>
-    <p class="material-symbols-outlined">edit</p>
+    <p class="tooltip">
+      <router-link :to="{ name: 'edit', params: { id: house.id } }">
+        <span class="material-symbols-outlined">edit</span>
+        <span class="tooltiptext">Edit this house</span>
+      </router-link>
+    </p>
   </div>
 </template>
 
