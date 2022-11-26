@@ -1,9 +1,9 @@
 <template>
   <div class="row">
     <router-link class="left" to="/">
-      <span class="material-symbols-outlined"> keyboard_backspace </span> Back
-      to the overview</router-link
-    >
+      <span class="material-symbols-outlined"> keyboard_backspace </span>
+      <span class="hideInMobile">Back to the overview</span>
+    </router-link>
   </div>
   <div class="row" v-if="loadingState">Loading.</div>
   <div class="row" v-if="!loadingState && house">
@@ -12,14 +12,14 @@
         <img alt="house photo" :src="house.image" class="bigImage" />
       </div>
 
-      <div>
+      <div class="info">
         <h2>{{ house.location?.street }}</h2>
       </div>
-      <div>
+      <div class="info">
         <span class="material-symbols-outlined"> location_on </span>
         {{ house.location?.zip }} {{ house.location?.city }}
       </div>
-      <div>
+      <div class="info">
         <span class="material-symbols-outlined"> euro_symbol </span>
         {{ house.price }}
         <span class="material-symbols-outlined"> square </span>
@@ -29,7 +29,7 @@
         /></span>
         Build in{{ house.constructionYear }}
       </div>
-      <div>
+      <div class="info">
         <span class="material-symbols-outlined"> bed </span
         >{{ house.rooms.bedrooms }}
         <span class="material-symbols-outlined"> bathtub </span
@@ -37,12 +37,12 @@
         <span class="material-symbols-outlined"> garage_home </span>
         {{ house.hasGarage }}
       </div>
-      <div>{{ house.description }}</div>
+      <div class="info">{{ house.description }}</div>
     </div>
     <div class="col2">
       <div>
         <h2>Recommended</h2>
-        <div class="main" v-for="house in houses.slice(0, 3)" :key="house.id">
+        <div v-for="house in houses.slice(0, 3)" :key="house.id">
           <HouseCard :house="house" />
         </div>
       </div>
@@ -93,7 +93,7 @@ export default {
   width: 100%;
   display: block;
   background-color: rgb(233, 232, 232);
-  padding: 15px;
+  padding: 25px;
 }
 .left {
   float: left;
@@ -117,6 +117,9 @@ export default {
 .bigImage {
   width: 100%;
 }
+.info {
+  padding: 15px;
+}
 
 .smallicon {
   height: 25px;
@@ -125,6 +128,13 @@ export default {
 @media only screen and (max-width: 768px) {
   .hideInMobile {
     display: none;
+  }
+  .col1 {
+    width: 100%;
+    margin: 0;
+  }
+  .col2 {
+    width: 100%;
   }
 }
 </style>
