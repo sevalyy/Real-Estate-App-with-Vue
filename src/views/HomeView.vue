@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <div class="flex">
+    <div class="flex1">
       <h2>Houses</h2>
       <router-link to="/newhouse" class="create">
         <span class="material-symbols-outlined small"> add </span>
-        CREATE NEW
+        <span class="hideInMobile">CREATE NEW </span>
       </router-link>
     </div>
-    <div class="flex">
+    <div class="flex2">
       <input placeholder="search for a house" v-model.trim="searchText" />
 
       <div>
@@ -92,7 +92,13 @@ export default {
   text-decoration: none;
   color: black;
 }
-.flex {
+.flex1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 50px;
+}
+.flex2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -136,5 +142,36 @@ input {
 img {
   width: 50%;
   margin-top: 30px;
+}
+.column {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .hideInMobile {
+    display: none;
+  }
+  .flex2 {
+    display: block;
+  }
+  button {
+    width: 50%;
+  }
+  input {
+    width: 100%;
+  }
+  .create {
+    border: none;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+  }
+}
+.small {
+  font-weight: bolder;
+  text-decoration: none;
+  font-size: 2em;
 }
 </style>

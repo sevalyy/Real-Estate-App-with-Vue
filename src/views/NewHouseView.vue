@@ -1,17 +1,19 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col2 expandOnSmall">
-        <router-link class="left" to="/">
-          <span class="material-symbols-outlined"> keyboard_backspace </span>
-          Back Back to the overview</router-link
-        >
+    <div class="inMobile">
+      <div class="row">
+        <div class="col2 expandOnSmall">
+          <router-link class="left" to="/">
+            <span class="material-symbols-outlined"> keyboard_backspace </span>
+            <span class="hideInMobile"> Back Back to the overview</span>
+          </router-link>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col2 expandOnSmall">
-        <h3 v-if="!id" class="left">Create New Listing</h3>
-        <h3 v-if="id" class="left">Update House</h3>
+      <div class="row">
+        <div class="col2 expandOnSmall">
+          <h3 v-if="!id" class="left">Create New Listing</h3>
+          <h3 v-if="id" class="left">Update House</h3>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -478,5 +480,15 @@ input[type="submit"] {
   color: white;
   background-color: rgb(223, 88, 9);
   font-weight: bold;
+}
+@media only screen and (max-width: 768px) {
+  .hideInMobile {
+    display: none;
+  }
+  .inMobile {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
 }
 </style>
