@@ -1,9 +1,17 @@
 <template>
   <div class="main">
-    <img alt="DTT logo" src="../assets/dtt.png" />
-    <router-link to="/">Houses</router-link>
+    <img alt="DTT logo" src="../assets/dtt.png" class="hideInMobile" />
 
-    <router-link to="/about">About</router-link>
+    <router-link to="/">
+      <p class="hideInMobile">Houses</p>
+      <span class="material-symbols-outlined showInMobile"> home </span>
+    </router-link>
+
+    <router-link to="/about">
+      <p class="hideInMobile">About</p>
+
+      <span class="material-symbols-outlined showInMobile"> info </span>
+    </router-link>
   </div>
 </template>
 
@@ -37,5 +45,22 @@ nav a {
 
 nav a.router-link-exact-active {
   font-weight: bolder;
+}
+.showInMobile {
+  display: none;
+}
+.hideInMobile {
+  display: block;
+}
+@media only screen and (max-width: 768px) {
+  .showInMobile {
+    display: block;
+  }
+  .hideInMobile {
+    display: none;
+  }
+  .main {
+    justify-content: space-around;
+  }
 }
 </style>

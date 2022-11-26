@@ -105,12 +105,12 @@ export default {
 .col1 {
   float: left;
   width: 40%;
-  margin: 0 5% 5% 15%;
+  margin: 0 0 5% 15%;
   background-color: white;
 }
 .col2 {
   float: left;
-  width: 30%;
+  width: 35%;
   display: inline;
   margin: 0 5% 5% 5%;
 }
