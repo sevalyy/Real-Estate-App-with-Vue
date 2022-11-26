@@ -78,7 +78,7 @@ export default {
 .card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 10px 0px;
   padding: 10px;
 }
@@ -90,8 +90,8 @@ p {
   margin: 10px;
 }
 img {
-  height: 150px;
-  width: 200px;
+  width: 25%;
+  border-radius: 10px;
 }
 .boldText {
   font-weight: bolder;
@@ -102,6 +102,9 @@ img {
 .info {
   text-align: left;
   font-size: 1vw;
+  width: 40%;
+  height: 50%;
+  margin-left: 10px;
 }
 .tooltip {
   position: relative;
@@ -127,5 +130,14 @@ img {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+@media only screen and (max-width: 768px) {
+  img {
+    width: 50%;
+  }
+  .material-symbols-outlined {
+    font-size: 1.2vw;
+  }
 }
 </style>

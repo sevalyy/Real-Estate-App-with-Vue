@@ -88,6 +88,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   background-color: white;
+  border-radius: 10px;
   margin: 20px 50px;
   text-decoration: none;
   color: black;
