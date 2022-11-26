@@ -11,8 +11,8 @@
       </div>
       <div class="row">
         <div class="col2 expandOnSmall">
-          <h3 v-if="!id" class="left">Create New Listing</h3>
-          <h3 v-if="id" class="left">Update House</h3>
+          <h2 v-if="!id" class="left">Create New Listing</h2>
+          <h2 v-if="id" class="left">Update House</h2>
         </div>
       </div>
     </div>
@@ -489,6 +489,10 @@ input[type="submit"] {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+  }
+  .container {
+    background-image: none;
+    padding-left: 0;
   }
 }
 </style>
