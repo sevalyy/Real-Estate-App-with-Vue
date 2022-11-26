@@ -1,8 +1,8 @@
 <template>
-  <nav class="normal">
+  <nav class="normal fixed-nav-bar">
     <NavBar />
   </nav>
-  <router-view />
+  <router-view class="forFixed" />
   <nav class="sticky">
     <NavBar />
   </nav>
@@ -25,6 +25,17 @@ export default {
   background-color: rgb(233, 232, 232);
   min-height: 100vh;
 }
+.fixed-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+}
+.forFixed {
+  margin-top: 65px;
+}
+
 .sticky {
   display: none;
 }
